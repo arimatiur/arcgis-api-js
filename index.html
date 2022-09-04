@@ -30,7 +30,9 @@
       "esri/PopupTemplate",
       "esri/widgets/BasemapGallery",
       "esri/widgets/Search",
-      "esri/Basemap"
+      "esri/Basemap",
+      "esri/widgets/Expand",
+      "esri/widgets/Legend"
       ], function (
       Map,
       MapView,
@@ -38,7 +40,9 @@
       PopupTemplate,
       BasemapGallery,
       Search,
-      Basemap) {
+      Basemap,
+      Expand,
+      Legend) {
         function createFillSymbol(value, color) {
           return {
             "value": value,
@@ -87,7 +91,7 @@
           basemap: "osm",
           layers: layerRDTR
         });
-        //buat mapview
+        //buat map
         const view = new MapView({
           map: map,
           zoom: 14,
@@ -104,11 +108,26 @@
         const search = new Search({
           view: view
         });
-        view.ui.add(basemapGallery, {
+        const legend = new Legend({
+          view: view
+        });
+        const legendExpand = new Expand({
+          content: legend
+        });
+        const bgExpand = new Expand({
+          content: basemapGallery
+        });
+        const searchExpand = new Expand({
+          content: search
+        });
+        view.ui.add(bgExpand, {
           position: "top-left"
         });
-        view.ui.add(search, {
+        view.ui.add(searchExpand, {
           position: "top-right"
+        });
+        view.ui.add(legendExpand, {
+          position: "top-left"
         });
       });
     </script>
