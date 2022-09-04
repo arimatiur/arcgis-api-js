@@ -25,13 +25,17 @@
       Map,
       MapView,
       GeoJSONLayer) {
+        const layer = new GeoJSONLayer({
+          url: "https://raw.githubusercontent.com/arimatiur/arcgis-api-js/main/geojson/layer.geojson"
+        })
         const map = new Map({
-          basemap: "osm"
+          basemap: "osm",
+          layers: layer
         });
         const view = new MapView({
           map: map,
-          zoom: 10,
-          center: [112.79444248509935, -7.283526624977435],
+          zoom: 14,
+          center: [112.43555901934971, -7.47209689444631],
           container: "viewDiv"
         });
       });
