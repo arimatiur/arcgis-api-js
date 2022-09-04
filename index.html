@@ -15,28 +15,100 @@
         height: 100%;
         width: 100%;
       }
+      #viewDiv2 {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
     </style>
     <script type="text/javascript">
       require([
       "esri/Map",
       "esri/views/MapView",
-      "esri/layers/GeoJSONLayer"
+      "esri/layers/GeoJSONLayer",
+      "esri/PopupTemplate",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Search",
+      "esri/Basemap"
       ], function (
       Map,
       MapView,
-      GeoJSONLayer) {
-        const layer = new GeoJSONLayer({
+      GeoJSONLayer,
+      PopupTemplate,
+      BasemapGallery,
+      Search,
+      Basemap) {
+        function createFillSymbol(value, color) {
+          return {
+            "value": value,
+            "label": value,
+            "symbol": {
+              "color": color,
+              "type": "simple-fill",
+              "style": "solid",
+              "outline": {
+                "style": "solid",
+                "width": "0.5px",
+                "color": "#6E6E6E"
+              }
+            }
+          };
+        }
+        const rdtrLayerRenderer = {
+          type: "unique-value",
+          field: "ZONA",
+          uniqueValueInfos: [
+            createFillSymbol("Perlindungan Setempat", "#99FF33"), // Functionnya dipanggil
+            createFillSymbol("Ruang Terbuka Hijau", "#00E271"),
+            createFillSymbol("Zona Campuran", "#E8BEFF"),
+            createFillSymbol("Zona Industri", "#9C9C9C"),
+            createFillSymbol("Zona Perdagangan dan Jasa", "#EB7878"),
+            createFillSymbol("Zona Perkantoran", "#C88CFF"),
+            createFillSymbol("Zona Perumahan", "#FAFA6E"),
+            createFillSymbol("Zona Peruntukan Khusus", "#CCCCD6"),
+            createFillSymbol("Zona Peruntukan Lainnya", "#579687"),
+            createFillSymbol("Zona Sarana Pelayanan Umum", "#DCA078"),
+          ]
+        };
+        // Buat popup
+        const popup = new PopupTemplate({
+          title: "Layer RDTR",
+          content: "<hr>{KODE} <br><hr> {ZONA} <br><hr> {SUB_ZONA}"
+        });
+        //buat layer
+        const layerRDTR = new GeoJSONLayer({
+          renderer: rdtrLayerRenderer,
+          popupTemplate: popup,
           url: "https://raw.githubusercontent.com/arimatiur/arcgis-api-js/main/geojson/layer.geojson"
         });
+        //buat map
         const map = new Map({
           basemap: "osm",
-          layers: layer
+          layers: layerRDTR
         });
+        //buat mapview
         const view = new MapView({
           map: map,
           zoom: 14,
           center: [112.43555901934971, -7.47209689444631],
           container: "viewDiv"
+        });
+        const satelliteBasemap = Basemap.fromId("satellite");
+        const osmBasemap = Basemap.fromId("osm");
+        const topovectorBasemap = Basemap.fromId("topo-vector");
+        const basemapGallery = new BasemapGallery({
+          view: view,
+          source: [satelliteBasemap, osmBasemap, topovectorBasemap]
+        });
+        const search = new Search({
+          view: view
+        });
+        view.ui.add(basemapGallery, {
+          position: "top-left"
+        });
+        view.ui.add(search, {
+          position: "top-right"
         });
       });
     </script>
