@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>WebGIS Ari Matiur</title>
+    <title>Jakarta Satu - Peta</title>
     <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css">
     <script src="https://js.arcgis.com/4.24/"></script>
 
@@ -12,116 +12,39 @@
       #viewDiv {
         padding: 0;
         margin: 0;
-        height: 100%;
         width: 100%;
+        height: 100%;
       }
     </style>
-    <script type="text/javascript">
+
+    <script>
       require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/GeoJSONLayer",
-      "esri/PopupTemplate",
-      "esri/widgets/BasemapGallery",
-      "esri/widgets/Search",
-      "esri/Basemap",
-      "esri/widgets/Expand",
-      "esri/widgets/Legend"
-      ], function (
-      Map,
-      MapView,
-      GeoJSONLayer,
-      PopupTemplate,
-      BasemapGallery,
-      Search,
-      Basemap,
-      Expand,
-      Legend) {
-        function createFillSymbol(value, color) {
-          return {
-            "value": value,
-            "label": value,
-            "symbol": {
-              "color": color,
-              "type": "simple-fill",
-              "style": "solid",
-              "outline": {
-                "style": "solid",
-                "width": "0.5px",
-                "color": "#6E6E6E"
-              }
-            }
-          };
-        }
-        const rdtrLayerRenderer = {
-          type: "unique-value",
-          field: "ZONA",
-          uniqueValueInfos: [
-            createFillSymbol("Perlindungan Setempat", "#99FF33"), // Functionnya dipanggil
-            createFillSymbol("Ruang Terbuka Hijau", "#00E271"),
-            createFillSymbol("Zona Campuran", "#E8BEFF"),
-            createFillSymbol("Zona Industri", "#9C9C9C"),
-            createFillSymbol("Zona Perdagangan dan Jasa", "#EB7878"),
-            createFillSymbol("Zona Perkantoran", "#C88CFF"),
-            createFillSymbol("Zona Perumahan", "#FAFA6E"),
-            createFillSymbol("Zona Peruntukan Khusus", "#CCCCD6"),
-            createFillSymbol("Zona Peruntukan Lainnya", "#579687"),
-            createFillSymbol("Zona Sarana Pelayanan Umum", "#DCA078"),
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/Basemap",
+        "esri/layers/VectorTileLayer"
+      ], function(
+        Map,
+        MapView,
+        Basemap,
+        VectorTileLayer
+      ){
+        const petaDasar2019 = new VectorTileLayer({
+          url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/peta_dasar_update_2019_vt/VectorTileServer"
+        });
+        const basemap = new Basemap({
+          baseLayers: [
+            petaDasar2019
           ]
-        };
-        // Buat popup
-        const popup = new PopupTemplate({
-          title: "Layer RDTR",
-          content: "<hr>{KODE} <br><hr> {ZONA} <br><hr> {SUB_ZONA}"
-        });
-        //buat layer
-        const layerRDTR = new GeoJSONLayer({
-          renderer: rdtrLayerRenderer,
-          popupTemplate: popup,
-          url: "https://raw.githubusercontent.com/arimatiur/arcgis-api-js/main/geojson/layer.geojson"
-        });
-        //buat map
+        })
         const map = new Map({
-          basemap: "osm",
-          layers: layerRDTR
+          basemap: basemap
         });
-        //buat map
         const view = new MapView({
           map: map,
-          zoom: 14,
-          center: [112.43555901934971, -7.47209689444631],
-          container: "viewDiv"
-        });
-        const satelliteBasemap = Basemap.fromId("satellite");
-        const osmBasemap = Basemap.fromId("osm");
-        const topovectorBasemap = Basemap.fromId("topo-vector");
-        const basemapGallery = new BasemapGallery({
-          view: view,
-          source: [satelliteBasemap, osmBasemap, topovectorBasemap]
-        });
-        const search = new Search({
-          view: view
-        });
-        const legend = new Legend({
-          view: view
-        });
-        const legendExpand = new Expand({
-          content: legend
-        });
-        const bgExpand = new Expand({
-          content: basemapGallery
-        });
-        const searchExpand = new Expand({
-          content: search
-        });
-        view.ui.add(bgExpand, {
-          position: "top-left"
-        });
-        view.ui.add(searchExpand, {
-          position: "top-right"
-        });
-        view.ui.add(legendExpand, {
-          position: "top-left"
+          container: "viewDiv",
+          zoom: 15,
+          center: [106.826959, -6.176923]
         });
       });
     </script>
