@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>QUERY SPASIAL</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.24/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+  require([
+    "esri/Map",
+    "esri/views/MapView",
+    "esri/widgets/Sketch",
+    "esri/layers/GeoJSONLayer",
+    "esri/layers/GraphicsLayer"
+  ], function(
+    Map,
+    MapView,
+    Sketch,
+    GeoJSONLayer,
+    GraphicsLayer
+  ){
+    const map = new Map({
+      basemap: "osm"
+    });
+    const view = new MapView({
+      map: map,
+      zoom: 12,
+      center: [106.826959, -6.176923],
+      container: "viewDiv"
+    });
+    const grpahicsLayerSketch = new GraphicsLayer();
+    map.add(grpahicsLayerSketch);
+    const sketch = new Sketch({
+      layer: grpahicsLayerSketch,
+      view: view,
+      creationMode: "update"
+    });
+    view.ui.add(sketch, "top-right");
+    sketch.on("update", function(event){});
+  });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
+‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍

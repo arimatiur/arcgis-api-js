@@ -22,13 +22,39 @@
         "esri/Map",
         "esri/views/MapView",
         "esri/Basemap",
-        "esri/layers/VectorTileLayer"
+        "esri/layers/VectorTileLayer",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/Expand"
       ], function(
         Map,
         MapView,
         Basemap,
-        VectorTileLayer
+        VectorTileLayer,
+        FeatureLayer,
+        Legend,
+        Expand
       ){
+        const kominfoJaringanFO = new FeatureLayer({
+          url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/BTS_FO_Kominfo/FeatureServer/1",
+          title: "Jaringan FO"
+        });
+        const kominfoBTS = new FeatureLayer({
+          url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/BTS_FO_Kominfo/FeatureServer/0",
+          title: "Menara BTS"
+        });
+        const dinsosPantiSosial = new FeatureLayer({
+          url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/Panti_Sosial/FeatureServer/7",
+          title: "Sarana Kesejahteraan Sosial"
+        });
+        const bangunanDKI = new FeatureLayer({
+          url: "https://tataruang.jakarta.go.id/server/rest/services/DCKTRP/Master_Bangunan_DKI_View/FeatureServer/5",
+          title: "Bangunan DKI"
+        });
+        const bangunanIMBDPMPTSP = new FeatureLayer({
+          url: "https://jakartasatu.jakarta.go.id/server/rest/services/DPMPTSP/IMB_PTSP/FeatureServer/0",
+          title: "Peta IMB DPMPTSP"
+        });
         const petaDasar2019 = new VectorTileLayer({
           url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/peta_dasar_update_2019_vt/VectorTileServer"
         });
@@ -36,9 +62,16 @@
           baseLayers: [
             petaDasar2019
           ]
-        })
+        });
         const map = new Map({
-          basemap: basemap
+          basemap: basemap,
+          layers: [
+            kominfoJaringanFO,
+            kominfoBTS,
+            dinsosPantiSosial,
+            bangunanDKI,
+            bangunanIMBDPMPTSP
+          ]
         });
         const view = new MapView({
           map: map,
@@ -46,6 +79,10 @@
           zoom: 15,
           center: [106.826959, -6.176923]
         });
+        const legend = new Legend({
+          view: view
+        });
+        view.ui.add(legend, "top-left");
       });
     </script>
   </head>
