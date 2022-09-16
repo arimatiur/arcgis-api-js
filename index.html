@@ -25,7 +25,10 @@
         "esri/layers/VectorTileLayer",
         "esri/layers/FeatureLayer",
         "esri/widgets/Legend",
-        "esri/widgets/Expand"
+        "esri/widgets/Expand",
+        "esri/widgets/LayerList",
+        "esri/layers/GroupLayer",
+        "esri/widgets/LayerList/ListItem"
       ], function(
         Map,
         MapView,
@@ -33,31 +36,49 @@
         VectorTileLayer,
         FeatureLayer,
         Legend,
-        Expand
+        Expand,
+        LayerList,
+        GroupLayer,
+        ListItem
       ){
+        //LAYER-LAYER
         const kominfoJaringanFO = new FeatureLayer({
           url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/BTS_FO_Kominfo/FeatureServer/1",
-          title: "Jaringan FO"
+          title: "Jaringan FO",
+          visible: true
         });
         const kominfoBTS = new FeatureLayer({
           url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/BTS_FO_Kominfo/FeatureServer/0",
-          title: "Menara BTS"
+          title: "Menara BTS",
+          visible: true
         });
         const dinsosPantiSosial = new FeatureLayer({
           url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/Panti_Sosial/FeatureServer/7",
-          title: "Sarana Kesejahteraan Sosial"
+          title: "Sarana Kesejahteraan Sosial",
+          visible: false
         });
         const bangunanDKI = new FeatureLayer({
           url: "https://tataruang.jakarta.go.id/server/rest/services/DCKTRP/Master_Bangunan_DKI_View/FeatureServer/5",
-          title: "Bangunan DKI"
+          title: "Bangunan DKI",
+          visible: false
         });
         const bangunanIMBDPMPTSP = new FeatureLayer({
           url: "https://jakartasatu.jakarta.go.id/server/rest/services/DPMPTSP/IMB_PTSP/FeatureServer/0",
-          title: "Peta IMB DPMPTSP"
+          title: "Peta IMB DPMPTSP",
+          visible: false
         });
         const petaDasar2019 = new VectorTileLayer({
           url: "https://jakartasatu.jakarta.go.id/server/rest/services/Hosted/peta_dasar_update_2019_vt/VectorTileServer"
         });
+        const layerKominfo = new GroupLayer({
+          layers: [
+            kominfoJaringanFO,
+            kominfoBTS],
+          title: "Kominfo",
+          visible: false
+        });
+
+        // MAP & MAPVIEW
         const basemap = new Basemap({
           baseLayers: [
             petaDasar2019
@@ -66,8 +87,7 @@
         const map = new Map({
           basemap: basemap,
           layers: [
-            kominfoJaringanFO,
-            kominfoBTS,
+            layerKominfo,
             dinsosPantiSosial,
             bangunanDKI,
             bangunanIMBDPMPTSP
@@ -79,10 +99,16 @@
           zoom: 15,
           center: [106.826959, -6.176923]
         });
+
+        //WIDGET-WIDGET
         const legend = new Legend({
           view: view
         });
         view.ui.add(legend, "top-left");
+        const layerListKominfo = new LayerList({
+          view: view
+        });
+        view.ui.add(layerListKominfo, "top-left");
       });
     </script>
   </head>
